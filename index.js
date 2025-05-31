@@ -1,3 +1,6 @@
+// Trabajo Práctico Obligatorio 2 - Teoría de la Computación
+// Alumnos: Gonzalo Barroso, Facundo García Brunetti, Benjamín Velasco, Rodrigo Villegas
+
 const readline = require('readline');
 const fs = require('fs');
 const { parseDotFile } = require('./parser');
