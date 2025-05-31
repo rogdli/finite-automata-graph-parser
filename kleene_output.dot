@@ -1,0 +1,21 @@
+digraph {
+    rankdir=LR;
+    inic [shape=point];
+    inic -> newInit;
+    newInit [shape=circle];
+    newFinal [shape=doublecircle];
+    A_q0 [shape=circle];
+    A_q1 [shape=circle];
+    A_q2 [shape=circle];
+    A_q3 [shape=circle];
+    newInit -> A_q0 [label="_"];
+    newInit -> newFinal [label="_"];
+    A_q0 -> A_q1 [label="a"];
+    A_q0 -> A_q2 [label="a"];
+    A_q1 -> A_q1 [label="b"];
+    A_q1 -> A_q3 [label="b"];
+    A_q2 -> A_q3 [label="_"];
+    A_q3 -> A_q3 [label="a, b"];
+    A_q1 -> A_q0 [label="_"];
+    A_q1 -> newFinal [label="_"];
+}

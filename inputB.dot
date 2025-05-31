@@ -1,0 +1,15 @@
+digraph {
+    rankdir=LR;
+    inic [shape=point];
+    inic -> p0;
+    p0 -> p1 [label="a"];
+    p0 -> p2 [label="a"];
+    p1 -> p1 [label="b"];
+    p1 -> p3 [label="b"];
+    p2 -> p3 [label="_"];
+    p3 -> p3 [label="a, b"];
+    p1 [shape=doublecircle];
+    p0 [shape=circle];
+    p2 [shape=circle];
+    p3 [shape=circle];
+}
