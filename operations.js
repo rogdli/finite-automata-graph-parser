@@ -10,7 +10,7 @@ function renameAutomaton(afn, prefix) {
     };
 }
 
-// UNIÓN CORREGIDA: Mantiene los estados finales originales
+// Unión
 function unionAFN(a, b) {
     const A = renameAutomaton(a, 'A');
     const B = renameAutomaton(b, 'B');
@@ -28,7 +28,7 @@ function unionAFN(a, b) {
     };
 }
 
-// CONCATENACIÓN CORREGIDA: Usar '_' en lugar de '.'
+// Concatenación
 function concatAFN(a, b) {
     const A = renameAutomaton(a, 'A');
     const B = renameAutomaton(b, 'B');
@@ -44,7 +44,7 @@ function concatAFN(a, b) {
     };
 }
 
-// KLEENE CORREGIDA: Usar '_' en lugar de '.'
+// Kleene
 function kleeneAFN(a) {
     const A = renameAutomaton(a, 'A');
 
