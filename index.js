@@ -1,5 +1,6 @@
 // Trabajo Práctico Obligatorio 2 - Teoría de la Computación
 // Alumnos: Gonzalo Barroso, Facundo García Brunetti, Benjamín Velasco, Rodrigo Villegas
+
 // Nota: se recomienda borrar los archivos .dot que no sean inputA e inputB para apreciar mejor la generación de archivos al ingresar opciones.
 
 const readline = require('readline');
