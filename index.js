@@ -1,6 +1,11 @@
 // Trabajo Práctico Obligatorio 2 - Teoría de la Computación
 // Alumnos: Gonzalo Barroso, Facundo García Brunetti, Benjamín Velasco, Rodrigo Villegas
 
+<<<<<<< HEAD
+=======
+// Nota: se recomienda borrar los archivos .dot que no sean inputA e inputB para apreciar mejor la generación de archivos al ingresar opciones.
+
+>>>>>>> eedf3d424b0a8d2c8c8e56d5f519e5584f2142a2
 const readline = require('readline');
 const fs = require('fs');
 const { parseDotFile } = require('./parser');
