@@ -5,7 +5,7 @@ digraph {
     q0 -> q1 [label="a"];
     q0 -> q2 [label="a"];
     q1 -> q1 [label="b"];
-    q1 -> q3 [label="b"];
+    q1 -> q3 [label="a"];
     q2 -> q3 [label="_"];
     q3 -> q3 [label="a, b"];
     q1 [shape=doublecircle];

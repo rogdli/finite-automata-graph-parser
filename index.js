@@ -1,3 +1,6 @@
+// Trabajo Práctico Obligatorio 2 - Teoría de la Computación
+// Alumnos: Gonzalo Barroso, Facundo García Brunetti, Benjamín Velasco, Rodrigo Villegas
+
 const readline = require('readline');
 const fs = require('fs');
 const { parseDotFile } = require('./parser');
@@ -50,7 +53,7 @@ function generateDotOutput(automaton, filename) {
 
 console.log('¿Qué operación quiere realizar?');
 console.log('1. Unión (A y B)\n2. Concatenación (A y B)\n3. Clausura de Kleene (A)');
-console.log('4. Convertir a AFD\n5. Minimizar AFD');
+console.log('4. Convertir a AFD (A) \n5. Minimizar AFD (A)');
 
 rl.question('Ingrese el número de la opción: ', (option) => {
     const afnA = parseDotFile('inputA.dot');

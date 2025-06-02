@@ -13,7 +13,7 @@ digraph {
     A_q0 -> A_q1 [label="a"];
     A_q0 -> A_q2 [label="a"];
     A_q1 -> A_q1 [label="b"];
-    A_q1 -> A_q3 [label="b"];
+    A_q1 -> A_q3 [label="a"];
     A_q2 -> A_q3 [label="_"];
     A_q3 -> A_q3 [label="a, b"];
     A_q1 -> A_q0 [label="_"];

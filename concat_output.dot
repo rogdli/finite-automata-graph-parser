@@ -13,13 +13,13 @@ digraph {
     A_q0 -> A_q1 [label="a"];
     A_q0 -> A_q2 [label="a"];
     A_q1 -> A_q1 [label="b"];
-    A_q1 -> A_q3 [label="b"];
+    A_q1 -> A_q3 [label="a"];
     A_q2 -> A_q3 [label="_"];
     A_q3 -> A_q3 [label="a, b"];
     B_p0 -> B_p1 [label="a"];
     B_p0 -> B_p2 [label="a"];
     B_p1 -> B_p1 [label="b"];
-    B_p1 -> B_p3 [label="b"];
+    B_p1 -> B_p3 [label="a"];
     B_p2 -> B_p3 [label="_"];
     B_p3 -> B_p3 [label="a, b"];
     A_q1 -> B_p0 [label="_"];
