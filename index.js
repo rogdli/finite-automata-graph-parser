@@ -1,17 +1,12 @@
-// Trabajo Práctico Obligatorio 2 - Teoría de la Computación
+// Trabajo Práctico Obligatorio - Teoría de la Computación
 // Alumnos: Gonzalo Barroso, Facundo García Brunetti, Benjamín Velasco, Rodrigo Villegas
 
-<<<<<<< HEAD
-=======
-// Nota: se recomienda borrar los archivos .dot que no sean inputA e inputB para apreciar mejor la generación de archivos al ingresar opciones.
-
->>>>>>> eedf3d424b0a8d2c8c8e56d5f519e5584f2142a2
 const readline = require('readline');
 const fs = require('fs');
 const { parseDotFile } = require('./parser');
 const { afnToAfd } = require('./afd');
 const { unionAFN, concatAFN, kleeneAFN } = require('./operations');
-const { minimizeAFD } = require('./minimize');
+const { GrammarParser, astToAutomaton, printAST } = require('./grammar');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -56,11 +51,39 @@ function generateDotOutput(automaton, filename) {
     console.log(`Archivo DOT generado: ${filename}`);
 }
 
-console.log('¿Qué operación quiere realizar?');
-console.log('1. Unión (A y B)\n2. Concatenación (A y B)\n3. Clausura de Kleene (A)');
-console.log('4. Convertir a AFD (A) \n5. Minimizar AFD (A)');
+function showMenu() {
+    console.log('\n=== MENÚ PRINCIPAL ===');
+    console.log('--- Operaciones con Autómatas (archivos .dot) ---');
+    console.log('1. Unión (A y B)');
+    console.log('2. Concatenación (A y B)');
+    console.log('3. Clausura de Kleene (A)');
+    console.log('4. Convertir a AFD (A)');
 
-rl.question('Ingrese el número de la opción: ', (option) => {
+    console.log('--- Operaciones con Gramáticas ---');
+    console.log('5. Parsear expresión regular con gramática LL(1)');
+    console.log('6. Convertir expresión regular a autómata');
+    console.log('7. Mostrar gramática LL(1)');
+    console.log('0. Salir');
+}
+
+function showGrammar() {
+    console.log('\n=== GRAMÁTICA LL(1) PARA EXPRESIONES REGULARES ===');
+    console.log('E  → T E\'');
+    console.log('E\' → | T E\' | ε');
+    console.log('T  → F T\'');
+    console.log('T\' → . F T\' | ε');
+    console.log('F  → P F\'');
+    console.log('F\' → * | ε');
+    console.log('P  → ( E ) | L');
+    console.log('L  → a | b | c');
+    console.log('\nOperadores (precedencia de mayor a menor):');
+    console.log('* : Clausura de Kleene');
+    console.log('. : Concatenación');
+    console.log('| : Unión');
+    console.log('\nEjemplos válidos: a, a|b, a.b, a*, (a|b)*');
+}
+
+function handleAutomatonOperations(option) {
     const afnA = parseDotFile('inputA.dot');
     const afnB = parseDotFile('inputB.dot');
     let result, outputFile;
@@ -70,8 +93,7 @@ rl.question('Ingrese el número de la opción: ', (option) => {
         case '2': result = concatAFN(afnA, afnB); outputFile = 'concat_output.dot'; break;
         case '3': result = kleeneAFN(afnA); outputFile = 'kleene_output.dot'; break;
         case '4': result = afnToAfd(afnA); outputFile = 'afd_output.dot'; break;
-        case '5': result = minimizeAFD(afnToAfd(afnA)); outputFile = 'minimized_output.dot'; break;
-        default: console.log('Opción no válida.'); rl.close(); return;
+        default: return null;
     }
 
     if (result) {
@@ -86,7 +108,7 @@ rl.question('Ingrese el número de la opción: ', (option) => {
 
         // Evaluar cadena si es AFD
         if (result.type === 'AFD') {
-            rl.question('\nIngrese una cadena para evaluar (Enter para terminar): ', input => {
+            rl.question('\nIngrese una cadena para evaluar (Enter para continuar): ', input => {
                 if (input.trim()) {
                     let currentState = result.initialState;
                     let valid = true;
@@ -110,10 +132,121 @@ rl.question('Ingrese el número de la opción: ', (option) => {
                         console.log(message);
                     }
                 }
-                rl.close();
+                mainLoop();
             });
         } else {
-            rl.close();
+            mainLoop();
         }
+    } else {
+        mainLoop();
     }
-});
+}
+
+function handleGrammarOperations(option) {
+    switch (option) {
+        case '5':
+            rl.question('Ingrese una expresión regular (ej: a|b, a.b*, (a|b)*): ', input => {
+                if (input.trim()) {
+                    const parser = new GrammarParser(input.trim());
+                    const ast = parser.parse();
+                    
+                    if (ast) {
+                        console.log('\n✓ Expresión válida según la gramática LL(1)');
+                        console.log('\n--- Árbol Sintáctico Abstracto (AST) ---');
+                        printAST(ast);
+                    } else {
+                        console.log('\n✗ Expresión inválida según la gramática LL(1)');
+                    }
+                }
+                mainLoop();
+            });
+            break;
+
+        case '6':
+            rl.question('Ingrese una expresión regular para convertir: ', input => {
+                if (input.trim()) {
+                    const parser = new GrammarParser(input.trim());
+                    const ast = parser.parse();
+                    
+                    if (ast) {
+                        console.log('\n✓ Expresión válida, convirtiendo a autómata...');
+                        
+                        const automaton = astToAutomaton(ast, { unionAFN, concatAFN, kleeneAFN });
+                        
+                        if (automaton) {
+                            const outputFile = 'grammar_to_automaton.dot';
+                            generateDotOutput(automaton, outputFile);
+                            
+                            console.log('\n--- AFN generado desde la gramática ---');
+                            console.log('Estado inicial:', automaton.initialState);
+                            console.log('Estados finales:', automaton.finalStates);
+                            console.log('Transiciones:');
+                            console.table(automaton.transitions);
+                            
+                            // Preguntar si quiere convertir a AFD
+                            rl.question('\n¿Convertir a AFD? (s/n): ', answer => {
+                                if (answer.toLowerCase() === 's') {
+                                    const afd = afnToAfd(automaton);
+                                    generateDotOutput(afd, 'grammar_to_afd.dot');
+                                    console.log('\n--- AFD generado ---');
+                                    console.log('Estado inicial:', afd.initialState);
+                                    console.log('Estados finales:', afd.finalStates);
+                                    console.table(afd.transitions);
+                                }
+                                mainLoop();
+                            });
+                        } else {
+                            console.log('Error al convertir a autómata');
+                            mainLoop();
+                        }
+                    } else {
+                        console.log('\n✗ Expresión inválida según la gramática LL(1)');
+                        mainLoop();
+                    }
+                } else {
+                    mainLoop();
+                }
+            });
+            break;
+
+        case '7':
+            showGrammar();
+            mainLoop();
+            break;
+
+        default:
+            mainLoop();
+    }
+}
+
+function mainLoop() {
+    showMenu();
+    rl.question('\nIngrese el número de la opción: ', (option) => {
+        switch (option) {
+            case '0':
+                console.log('¡Hasta luego!');
+                rl.close();
+                break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            
+                handleAutomatonOperations(option);
+                break;
+            case '5':
+            case '6':
+            case '7':
+                handleGrammarOperations(option);
+                break;
+            default:
+                console.log('Opción no válida.');
+                mainLoop();
+        }
+    });
+}
+
+// Iniciar el programa
+console.log('=== ANALIZADOR DE AUTÓMATAS Y GRAMÁTICAS ===');
+console.log('Trabajo Práctico - Teoría de la Computación');
+mainLoop();
